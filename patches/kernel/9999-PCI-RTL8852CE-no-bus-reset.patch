@@ -1,0 +1,17 @@
+diff --git a/drivers/pci/quirks.c b/drivers/pci/quirks.c
+index d7f9286f3f4e..56c8f42bdf59 100644
+--- a/drivers/pci/quirks.c
++++ b/drivers/pci/quirks.c
+@@ -3762,6 +3762,12 @@ static void quirk_no_bus_reset(struct pci_dev *dev)
+ 	dev->dev_flags |= PCI_DEV_FLAGS_NO_BUS_RESET;
+ }
+ 
++/*
++ * RTL8852CE becomes inaccessible after Secondary Bus Reset.
++ * Prevent bus reset for VFIO device assignment.
++ */
++DECLARE_PCI_FIXUP_HEADER(PCI_VENDOR_ID_REALTEK, 0xc852, quirk_no_bus_reset);
++
+ /*
+  * After asserting Secondary Bus Reset to downstream devices via a GB10
+  * Root Port, the link may not retrain correctly.
